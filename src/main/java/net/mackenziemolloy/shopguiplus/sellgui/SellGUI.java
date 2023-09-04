@@ -1,5 +1,19 @@
 package net.mackenziemolloy.shopguiplus.sellgui;
 
+import me.nahu.scheduler.wrapper.FoliaWrappedJavaPlugin;
+import net.mackenziemolloy.shopguiplus.sellgui.command.CommandSellGUI;
+import net.mackenziemolloy.shopguiplus.sellgui.utility.CommentedConfiguration;
+import net.mackenziemolloy.shopguiplus.sellgui.utility.FileUtils;
+import net.mackenziemolloy.shopguiplus.sellgui.utility.LogFormatter;
+import net.mackenziemolloy.shopguiplus.sellgui.utility.UpdateChecker;
+import net.mackenziemolloy.shopguiplus.sellgui.utility.sirblobman.VersionUtility;
+import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.plugin.PluginDescriptionFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,22 +21,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.mackenziemolloy.shopguiplus.sellgui.utility.FileUtils;
-import net.mackenziemolloy.shopguiplus.sellgui.utility.LogFormatter;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import net.mackenziemolloy.shopguiplus.sellgui.command.CommandSellGUI;
-import net.mackenziemolloy.shopguiplus.sellgui.utility.CommentedConfiguration;
-import net.mackenziemolloy.shopguiplus.sellgui.utility.UpdateChecker;
-import net.mackenziemolloy.shopguiplus.sellgui.utility.sirblobman.VersionUtility;
-import org.bstats.bukkit.Metrics;
-
-public final class SellGUI extends JavaPlugin {
+public final class SellGUI extends FoliaWrappedJavaPlugin {
     private CommentedConfiguration configuration;
     private static SellGUI instance;
     public Logger fileLogger;
@@ -36,15 +35,13 @@ public final class SellGUI extends JavaPlugin {
         this.version = null;
     }
 
-
-
-
     @Override
     public void onEnable() {
         instance = this;
+        Logger logger = getLogger();
+        logger.info("Successfully initialized scheduler of type: " + getScheduler().getImplementationType());
 
         new CommandSellGUI(this).register();
-        Logger logger = getLogger();
 
         checkCompatibility();
 

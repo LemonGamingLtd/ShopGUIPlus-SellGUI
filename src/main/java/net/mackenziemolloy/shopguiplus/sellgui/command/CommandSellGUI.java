@@ -43,7 +43,6 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.StringUtil;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -234,8 +233,7 @@ public final class CommandSellGUI implements TabExecutor {
         Set<Integer> ignoredSlotSet = new HashSet<>();
         setDecorationItems(configuration, gui, ignoredSlotSet);
         gui.setCloseGuiAction(event -> {
-            BukkitScheduler scheduler = Bukkit.getScheduler();
-            scheduler.runTask(this.plugin, () -> onGuiClose(player, event, ignoredSlotSet));
+            this.plugin.getScheduler().runTaskAtEntity(player, () -> onGuiClose(player, event, ignoredSlotSet));
             //onGuiClose(player, event, ignoredSlotSet);
         });
 
@@ -475,22 +473,22 @@ public final class CommandSellGUI implements TabExecutor {
                     Runnable task = () -> {
                         Bukkit.getPluginManager().callEvent(shopPostTransactionEvent);
                     };
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, task);
+                    this.plugin.getScheduler().runTask(task);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             
             } else {
+                Location location = player.getLocation().add(0.0D, 0.5D, 0.0D);
                 Map<Integer, ItemStack> fallenItems = event.getPlayer().getInventory().addItem(i);
                 Runnable task = () -> {
                     World world = player.getWorld();
-                    Location location = player.getLocation().add(0.0D, 0.5D, 0.0D);
                     fallenItems.values().forEach(item -> {
                         world.dropItemNaturally(location, item);
                         excessItems[0] = true;
                     });
                 };
-                Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, task);
+                this.plugin.getScheduler().runTaskAtLocation(location, task);
             }
         
         }
