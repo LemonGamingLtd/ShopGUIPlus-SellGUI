@@ -6,6 +6,11 @@ plugins {
 group 'net.mackenziemolloy.shopguiplus.sellgui'
 version '1.1.8'
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = sourceCompatibility
+}
+
 repositories {
 	mavenLocal()
     mavenCentral()
@@ -36,8 +41,9 @@ dependencies {
 
 
 shadowJar {
-    relocate "dev.triumphteam.gui", "net.mackenziemolloy.shopguiplus.sellgui"
-    relocate "org.bstats", "net.mackenziemolloy.shopguiplus.sellgui.bstats"
+    relocate "dev.triumphteam.gui", "net.mackenziemolloy.shopguiplus.libs.sellgui"
+    relocate "org.bstats", "net.mackenziemolloy.shopguiplus.sellgui.libs.bstats"
+    relocate "me.nahu", "net.mackenziemolloy.shopguiplus.sellgui.libs.net.nahu"
     minimize()
 }
 
