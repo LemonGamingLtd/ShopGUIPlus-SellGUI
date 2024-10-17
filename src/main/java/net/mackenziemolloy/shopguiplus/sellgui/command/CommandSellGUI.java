@@ -538,8 +538,14 @@ public final class CommandSellGUI implements TabExecutor {
                         String itemNameFormatted = null;
 
                         ItemMeta itemMeta = materialItemStack.getItemMeta();
-                        if (itemMeta != null && itemMeta.hasItemName()) {
-                            itemNameFormatted = itemMeta.getItemName();
+
+                        // this method solely exists for versions >= 1.20.6
+                        try {
+                            if (itemMeta != null && itemMeta.hasItemName()) {
+                                itemNameFormatted = itemMeta.getItemName();
+                            }
+                        } catch (Exception ignored) {
+
                         }
 
                         if(itemNameFormatted == null && itemMeta != null && itemMeta.hasDisplayName()) {
