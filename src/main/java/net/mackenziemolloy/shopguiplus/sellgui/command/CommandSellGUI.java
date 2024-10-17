@@ -535,19 +535,27 @@ public final class CommandSellGUI implements TabExecutor {
                                         ShopHandler.getEconomyType(materialItemStack))
                                 .getCurrencySuffix();
                     
-                        String itemNameFormatted = WordUtils.capitalize(materialItemStack.getType()
-                                .name().replace("AETHER_LEGACY_", "")
-                                .replace("LOST_AETHER_", "")
-                                .replace("_", " ").toLowerCase());
-    
+                        String itemNameFormatted = null;
+
                         ItemMeta itemMeta = materialItemStack.getItemMeta();
-                        if(itemMeta != null && itemMeta.hasDisplayName()) {
+                        if (itemMeta != null && itemMeta.hasItemName()) {
+                            itemNameFormatted = itemMeta.getItemName();
+                        }
+
+                        if(itemNameFormatted == null && itemMeta != null && itemMeta.hasDisplayName()) {
                             String displayName = itemMeta.getDisplayName();
                             if(!displayName.isEmpty()) {
                                 itemNameFormatted = materialItemStack.getItemMeta().getDisplayName();
                             }
                         }
-    
+
+                        if (itemNameFormatted == null) {
+                            itemNameFormatted = WordUtils.capitalize(materialItemStack.getType()
+                                .name().replace("AETHER_LEGACY_", "")
+                                .replace("LOST_AETHER_", "")
+                                .replace("_", " ").toLowerCase());
+                        }
+
                         if(minorVersion <= 12 && !configuration.getBoolean("options.show_item_damage")) {
                             itemNameFormatted += (":" + damageEntry.getKey());
                         }
